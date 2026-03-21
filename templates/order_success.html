@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}N' Kitchens | Order Success{% endblock %}
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <div class="card border-0 shadow-sm p-5 text-center">
+      <div class="display-5 mb-3">✅</div>
+      <h1 class="fw-bold">Order Received</h1>
+      {% if order %}
+        <p class="lead">Your order <strong>#{{ order.id }}</strong> was placed successfully.</p>
+        <p class="text-muted">We have your delivery details and will start processing it shortly.</p>
+      {% else %}
+        <p class="text-muted">Your order was placed successfully.</p>
+      {% endif %}
+      <div class="mt-3 d-flex justify-content-center gap-3 flex-wrap">
+        <a href="{{ url_for('menu') }}" class="btn btn-dark">Order More</a>
+        <a href="{{ url_for('home') }}" class="btn btn-outline-dark">Back Home</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}N' Kitchens | Checkout{% endblock %}
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="card border-0 shadow-sm p-4">
+          <h1 class="fw-bold mb-3">Checkout</h1>
+          <form method="post">
+            <div class="mb-3">
+              <label class="form-label">Full Name</label>
+              <input type="text" name="customer_name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Phone Number</label>
+              <input type="text" name="phone" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Delivery Address</label>
+              <textarea name="address" class="form-control" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Order Notes</label>
+              <textarea name="notes" class="form-control" rows="3" placeholder="No pepper, extra meat, landmark, etc."></textarea>
+            </div>
+            <button class="btn btn-warning btn-lg">Place Order</button>
+          </form>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="card border-0 shadow-sm p-4">
+          <h4 class="fw-bold mb-3">Order Summary</h4>
+          {% for entry in cart_items %}
+            <div class="d-flex justify-content-between border-bottom py-2">
+              <div>{{ entry.item.name }} x {{ entry.quantity }}</div>
+              <strong>TZS {{ '{:,.0f}'.format(entry.subtotal) }}</strong>
+            </div>
+          {% endfor %}
+          <div class="d-flex justify-content-between pt-3 fs-5">
+            <strong>Total</strong>
+            <strong>TZS {{ '{:,.0f}'.format(total) }}</strong>
+          </div>
+          <p class="text-muted small mt-3 mb-0">Every order is saved in the admin dashboard and can be sent to Telegram automatically.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

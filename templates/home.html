@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}N' Kitchens | Home{% endblock %}
+{% block content %}
+<section class="hero-section py-5">
+  <div class="container py-lg-5">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-6">
+        <span class="badge text-bg-light px-3 py-2 mb-3">Authentic Nigerian Meals in Dar</span>
+        <h1 class="display-4 fw-bold mb-3">Home-style Nigerian food. Fast ordering. Clean delivery flow.</h1>
+        <p class="lead text-muted mb-4">Let customers browse your menu, place orders on your website, and send each order directly to your Telegram instantly.</p>
+        <div class="d-flex gap-3 flex-wrap">
+          <a href="{{ url_for('menu') }}" class="btn btn-warning btn-lg">Browse Menu</a>
+          <a href="{{ url_for('checkout') }}" class="btn btn-outline-light btn-lg text-white border-white">Checkout</a>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-card p-4">
+          <h4 class="fw-bold mb-3">Why this setup works</h4>
+          <ul class="list-group list-group-flush rounded-3 overflow-hidden shadow-sm">
+            <li class="list-group-item">Customers order without creating an account</li>
+            <li class="list-group-item">Orders are saved in your admin dashboard</li>
+            <li class="list-group-item">Telegram alerts hit your phone instantly</li>
+            <li class="list-group-item">Easy to host on Render, Railway, or VPS</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5 bg-white">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h2 class="fw-bold mb-1">Featured Meals</h2>
+        <p class="text-muted mb-0">Start small, sell fast, expand later.</p>
+      </div>
+      <a href="{{ url_for('menu') }}" class="btn btn-outline-dark">See Full Menu</a>
+    </div>
+    <div class="row g-4">
+      {% for item in featured_items %}
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 menu-card shadow-sm border-0">
+          <img src="{{ item.image_url }}" class="card-img-top menu-image" alt="{{ item.name }}">
+          <div class="card-body d-flex flex-column">
+            <span class="small text-uppercase text-muted">{{ item.category }}</span>
+            <h5 class="fw-bold mt-1">{{ item.name }}</h5>
+            <p class="text-muted">{{ item.description }}</p>
+            <div class="mt-auto d-flex justify-content-between align-items-center">
+              <strong>TZS {{ '{:,.0f}'.format(item.price) }}</strong>
+              <form method="post" action="{{ url_for('add_to_cart', item_id=item.id) }}">
+                <button class="btn btn-warning">Add</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

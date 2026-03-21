@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Order #{{ order.id }}{% endblock %}
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+      <div>
+        <h1 class="fw-bold mb-1">Order #{{ order.id }}</h1>
+        <p class="text-muted mb-0">Customer details and items.</p>
+      </div>
+      <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-dark">Back</a>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="card border-0 shadow-sm p-4">
+          <h4 class="fw-bold mb-3">Items</h4>
+          {% for order_item in order.items %}
+            <div class="d-flex justify-content-between border-bottom py-2">
+              <div>{{ order_item.menu_item.name }} x {{ order_item.quantity }}</div>
+              <strong>TZS {{ '{:,.0f}'.format(order_item.quantity * order_item.price) }}</strong>
+            </div>
+          {% endfor %}
+          <div class="d-flex justify-content-between fs-5 pt-3">
+            <strong>Total</strong>
+            <strong>TZS {{ '{:,.0f}'.format(order.total_amount) }}</strong>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="card border-0 shadow-sm p-4 mb-4">
+          <h4 class="fw-bold mb-3">Customer</h4>
+          <p><strong>Name:</strong> {{ order.customer_name }}</p>
+          <p><strong>Phone:</strong> {{ order.phone }}</p>
+          <p><strong>Address:</strong> {{ order.address }}</p>
+          <p><strong>Notes:</strong> {{ order.notes or 'None' }}</p>
+        </div>
+        <div class="card border-0 shadow-sm p-4">
+          <h4 class="fw-bold mb-3">Update Status</h4>
+          <form method="post">
+            <select name="status" class="form-select mb-3">
+              {% for status in ['Pending', 'Cooking', 'Out for delivery', 'Delivered', 'Cancelled'] %}
+                <option value="{{ status }}" {% if order.status == status %}selected{% endif %}>{{ status }}</option>
+              {% endfor %}
+            </select>
+            <button class="btn btn-dark">Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

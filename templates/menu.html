@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}N' Kitchens | Menu{% endblock %}
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4">
+      <div>
+        <h1 class="fw-bold mb-1">Menu</h1>
+        <p class="text-muted mb-0">Simple menu. Clear prices. Fast checkout.</p>
+      </div>
+      <div class="d-flex flex-wrap gap-2">
+        <a class="btn {% if not active_category %}btn-dark{% else %}btn-outline-dark{% endif %}" href="{{ url_for('menu') }}">All</a>
+        {% for category in categories %}
+          <a class="btn {% if active_category == category %}btn-dark{% else %}btn-outline-dark{% endif %}" href="{{ url_for('menu', category=category) }}">{{ category }}</a>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="row g-4">
+      {% for item in items %}
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 menu-card shadow-sm border-0">
+          <img src="{{ item.image_url }}" class="card-img-top menu-image" alt="{{ item.name }}">
+          <div class="card-body d-flex flex-column">
+            <span class="small text-uppercase text-muted">{{ item.category }}</span>
+            <h5 class="fw-bold mt-1">{{ item.name }}</h5>
+            <p class="text-muted">{{ item.description }}</p>
+            <div class="d-flex justify-content-between align-items-center mt-auto">
+              <strong>TZS {{ '{:,.0f}'.format(item.price) }}</strong>
+              <form method="post" action="{{ url_for('add_to_cart', item_id=item.id) }}" class="d-flex gap-2">
+                <input type="number" name="quantity" value="1" min="1" class="form-control form-control-sm qty-input">
+                <button class="btn btn-warning">Add</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,46 @@
+:root {
+  --nk-green: #0f5132;
+  --nk-gold: #f4b400;
+  --nk-dark: #122118;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f7f4ee;
+  color: #1b1b1b;
+}
+
+.brand-nav {
+  background: linear-gradient(90deg, #0b3d25, #135c37);
+}
+
+.hero-section {
+  background: linear-gradient(135deg, rgba(15,81,50,.96), rgba(7,43,25,.92)),
+    url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1600&q=80') center/cover;
+  color: white;
+}
+
+.hero-card {
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1.25rem;
+  backdrop-filter: blur(10px);
+}
+
+.menu-card {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.menu-image {
+  height: 220px;
+  object-fit: cover;
+}
+
+.qty-input {
+  max-width: 84px;
+}
+
+.card {
+  border-radius: 1.25rem;
+}
