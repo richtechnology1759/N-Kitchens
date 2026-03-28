@@ -1,55 +1,259 @@
 {% extends 'base.html' %}
 {% block title %}N' Kitchens | Home{% endblock %}
+
 {% block content %}
-<section class="hero-section py-5">
-  <div class="container py-lg-5">
-    <div class="row align-items-center g-4">
+
+<section class="py-5 position-relative overflow-hidden" style="background: linear-gradient(135deg, #0f5132 0%, #198754 55%, #d1e7dd 100%);">
+  <div style="position:absolute; inset:0; background:
+    radial-gradient(circle at top right, rgba(255,255,255,0.14), transparent 35%),
+    radial-gradient(circle at bottom left, rgba(255,193,7,0.12), transparent 28%);
+    pointer-events:none;"></div>
+
+  <div class="container py-lg-5 position-relative">
+    <div class="row align-items-center g-5">
       <div class="col-lg-6">
-        <span class="badge text-bg-light px-3 py-2 mb-3">Authentic Nigerian Meals in Dar</span>
-        <h1 class="display-4 fw-bold mb-3">Home-style Nigerian food. Fast ordering. Clean delivery flow.</h1>
-        <p class="lead text-muted mb-4">Let customers browse your menu, place orders on your website, and send each order directly to your Telegram instantly.</p>
-        <div class="d-flex gap-3 flex-wrap">
-          <a href="{{ url_for('menu') }}" class="btn btn-warning btn-lg">Browse Menu</a>
-          <a href="{{ url_for('checkout') }}" class="btn btn-outline-light btn-lg text-white border-white">Checkout</a>
+        <span class="badge px-3 py-2 mb-3 rounded-pill shadow-sm"
+              style="background: rgba(255,255,255,0.9); color: #198754; backdrop-filter: blur(8px);">
+          Authentic Nigerian Meals in Dar es Salaam
+        </span>
+
+        <h1 class="display-3 fw-bold mb-3 text-white" style="line-height: 1.1;">
+          Fresh Nigerian Meals
+          <span class="text-warning d-block">Delivered Hot</span>
+        </h1>
+
+        <p class="lead mb-3 text-white">
+          Rich flavor. Fresh ingredients. Fast delivery.
+        </p>
+
+        <p class="text-white mb-4 fs-5" style="opacity: 0.85;">
+          Enjoy your favorite Nigerian dishes from jollof rice to egusi, vegetable soup, and okro soup, prepared with care and delivered fresh to your location.
+        </p>
+
+        <div class="d-flex flex-wrap gap-3 mb-4">
+          <a href="{{ url_for('menu') }}" class="btn btn-warning btn-lg px-4 shadow-sm">Order Food Now</a>
+          <a href="/my-orders" class="btn btn-light btn-lg px-4 shadow-sm">My Orders</a>
+          <a href="https://wa.me/255683344199?text=Hello%20I%20want%20to%20place%20a%20custom%20food%20order" class="btn btn-success btn-lg px-4 shadow-sm">
+            Custom Order
+          </a>
+        </div>
+
+        <div class="row g-3 pt-2">
+          <div class="col-6 col-sm-4">
+            <div class="rounded-4 p-3 text-center h-100 shadow-sm"
+                 style="background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(12px);">
+              <h5 class="fw-bold mb-1 text-white">Hot Meals</h5>
+              <small class="text-white" style="opacity:0.8;">Freshly prepared</small>
+            </div>
+          </div>
+          <div class="col-6 col-sm-4">
+            <div class="rounded-4 p-3 text-center h-100 shadow-sm"
+                 style="background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(12px);">
+              <h5 class="fw-bold mb-1 text-white">Fast Delivery</h5>
+              <small class="text-white" style="opacity:0.8;">Quick and easy</small>
+            </div>
+          </div>
+          <div class="col-6 col-sm-4">
+            <div class="rounded-4 p-3 text-center h-100 shadow-sm"
+                 style="background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(12px);">
+              <h5 class="fw-bold mb-1 text-white">Easy Ordering</h5>
+              <small class="text-white" style="opacity:0.8;">Simple checkout</small>
+            </div>
+          </div>
         </div>
       </div>
+
       <div class="col-lg-6">
-        <div class="hero-card p-4">
-          <h4 class="fw-bold mb-3">Why this setup works</h4>
-          <ul class="list-group list-group-flush rounded-3 overflow-hidden shadow-sm">
-            <li class="list-group-item">Customers order without creating an account</li>
-            <li class="list-group-item">Orders are saved in your admin dashboard</li>
-            <li class="list-group-item">Telegram alerts hit your phone instantly</li>
-            <li class="list-group-item">Easy to host on Render, Railway, or VPS</li>
-          </ul>
+        <div class="row g-3">
+          <div class="col-12">
+            <div class="border-0 shadow-lg rounded-5 overflow-hidden"
+                 style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(10px);">
+              <img
+                src="{{ url_for('static', filename='images/jollof0.jpeg') }}"
+                class="w-100"
+                alt="Jollof Rice"
+                style="height: 380px; object-fit: cover;"
+              >
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="border-0 shadow-sm rounded-4 overflow-hidden"
+                 style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(10px);">
+              <img
+                src="{{ url_for('static', filename='images/egusi1.jpeg') }}"
+                class="w-100"
+                alt="Egusi Soup"
+                style="height: 190px; object-fit: cover;"
+              >
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="border-0 shadow-sm rounded-4 overflow-hidden"
+                 style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(10px);">
+              <img
+                src="{{ url_for('static', filename='images/okro0.jpeg') }}"
+                class="w-100"
+                alt="Okro Soup"
+                style="height: 190px; object-fit: cover;"
+              >
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="py-5 bg-white">
-  <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <div>
-        <h2 class="fw-bold mb-1">Featured Meals</h2>
-        <p class="text-muted mb-0">Start small, sell fast, expand later.</p>
+<section class="py-5 position-relative overflow-hidden" style="background: linear-gradient(135deg, #0f5132 0%, #198754 55%, #d1e7dd 100%);">
+  <div style="position:absolute; inset:0; background: rgba(255,255,255,0.04); pointer-events:none;"></div>
+  <div class="container position-relative">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-6">
+        <div class="pe-lg-4">
+          <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-3 shadow-sm">Chef Highlight</span>
+          <h2 class="fw-bold mb-3 text-white">Vegetable Soup &amp; Fufu</h2>
+          <p class="text-white fs-5 mb-3" style="opacity: 0.85;">
+            A rich, satisfying bowl made with deep Nigerian flavor, fresh greens, and soft swallow to give customers that real homemade feeling.
+          </p>
+          <p class="text-white mb-4" style="opacity: 0.8;">
+            This featured section gives the homepage a stronger food look and helps one special meal stand out immediately when customers land on the site.
+          </p>
+
+          <div class="d-flex flex-wrap gap-3">
+            <a href="{{ url_for('menu') }}" class="btn btn-light btn-lg px-4">See Full Menu</a>
+            <a href="https://wa.me/255683344199?text=Hello%20I%20want%20to%20order%20vegetable%20soup%20and%20fufu" class="btn btn-success btn-lg px-4">
+              Order This Meal
+            </a>
+          </div>
+        </div>
       </div>
-      <a href="{{ url_for('menu') }}" class="btn btn-outline-dark">See Full Menu</a>
+
+      <div class="col-lg-6">
+        <div class="shadow-lg rounded-5 overflow-hidden"
+             style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(10px);">
+          <img
+            src="{{ url_for('static', filename='images/chefhero0.jpg') }}"
+            class="w-100"
+            alt="Vegetable Soup and Fufu"
+            style="height: 520px; object-fit: cover;"
+          >
+        </div>
+      </div>
     </div>
+  </div>
+</section>
+
+<section class="py-5 position-relative overflow-hidden" style="background: linear-gradient(135deg, #0f5132 0%, #198754 55%, #d1e7dd 100%);">
+  <div style="position:absolute; inset:0; background: rgba(255,255,255,0.05); pointer-events:none;"></div>
+  <div class="container position-relative">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold text-white">Why Customers Love N' Kitchens</h2>
+      <p class="text-white mb-0" style="opacity: 0.8;">Everything is built to make ordering food fast, easy, and satisfying.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-4">
+        <div class="rounded-4 h-100 text-center p-4 shadow-sm"
+             style="background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(14px);">
+          <div class="fs-1 mb-3">🍲</div>
+          <h4 class="fw-bold text-white">Authentic Taste</h4>
+          <p class="mb-0 text-white" style="opacity:0.82;">Enjoy rich Nigerian meals prepared with familiar flavor and care.</p>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="rounded-4 h-100 text-center p-4 shadow-sm"
+             style="background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(14px);">
+          <div class="fs-1 mb-3">🚚</div>
+          <h4 class="fw-bold text-white">Fast Delivery</h4>
+          <p class="mb-0 text-white" style="opacity:0.82;">Place your order quickly and get your food delivered hot and fresh.</p>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="rounded-4 h-100 text-center p-4 shadow-sm"
+             style="background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(14px);">
+          <div class="fs-1 mb-3">📲</div>
+          <h4 class="fw-bold text-white">Simple Ordering</h4>
+          <p class="mb-0 text-white" style="opacity:0.82;">Use the menu, checkout, My Orders, or WhatsApp custom order with ease.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5 position-relative overflow-hidden" style="background: linear-gradient(135deg, #0f5132 0%, #198754 55%, #d1e7dd 100%);">
+  <div style="position:absolute; inset:0; background: rgba(255,255,255,0.06); pointer-events:none;"></div>
+  <div class="container position-relative">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold text-white">How It Works</h2>
+      <p class="text-white mb-0" style="opacity: 0.8;">Order in 3 easy steps.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-12 col-md-4">
+        <div class="rounded-4 h-100 p-4 text-center shadow-sm"
+             style="background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(14px);">
+          <div class="display-6 fw-bold text-warning mb-3">1</div>
+          <h4 class="fw-bold text-white">Choose Your Meal</h4>
+          <p class="mb-0 text-white" style="opacity:0.82;">Browse the menu and pick your favorite dish.</p>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="rounded-4 h-100 p-4 text-center shadow-sm"
+             style="background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(14px);">
+          <div class="display-6 fw-bold text-warning mb-3">2</div>
+          <h4 class="fw-bold text-white">Place Your Order</h4>
+          <p class="mb-0 text-white" style="opacity:0.82;">Add to cart, fill in your details, and confirm your order.</p>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <div class="rounded-4 h-100 p-4 text-center shadow-sm"
+             style="background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(14px);">
+          <div class="display-6 fw-bold text-warning mb-3">3</div>
+          <h4 class="fw-bold text-white">Get It Delivered</h4>
+          <p class="mb-0 text-white" style="opacity:0.82;">Your hot meal is prepared and delivered to your location.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-5 position-relative overflow-hidden" id="home-menu" style="background: linear-gradient(135deg, #0f5132 0%, #198754 55%, #d1e7dd 100%);">
+  <div style="position:absolute; inset:0; background: rgba(255,255,255,0.08); pointer-events:none;"></div>
+  <div class="container position-relative">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-5">
+      <div>
+        <h2 class="fw-bold mb-1 text-white">Popular Menu</h2>
+        <p class="text-white mb-0" style="opacity: 0.8;">Choose from our customer favorites and order fast.</p>
+      </div>
+      <a href="{{ url_for('menu') }}" class="btn btn-dark">View Full Menu</a>
+    </div>
+
     <div class="row g-4">
       {% for item in featured_items %}
-      <div class="col-md-6 col-lg-4">
-        <div class="card h-100 menu-card shadow-sm border-0">
-          <img src="{{ item.image_url }}" class="card-img-top menu-image" alt="{{ item.name }}">
-          <div class="card-body d-flex flex-column">
-            <span class="small text-uppercase text-muted">{{ item.category }}</span>
-            <h5 class="fw-bold mt-1">{{ item.name }}</h5>
-            <p class="text-muted">{{ item.description }}</p>
-            <div class="mt-auto d-flex justify-content-between align-items-center">
-              <strong>TZS {{ '{:,.0f}'.format(item.price) }}</strong>
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="h-100 rounded-4 overflow-hidden shadow-sm"
+             style="background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(14px);">
+          <img
+            src="{{ item.image_url }}"
+            class="card-img-top"
+            alt="{{ item.name }}"
+            style="height: 260px; object-fit: cover;"
+          >
+          <div class="p-4 d-flex flex-column h-100">
+            <span class="small text-uppercase text-white" style="opacity: 0.72;">{{ item.category }}</span>
+            <h4 class="fw-bold mt-2 text-white">{{ item.name }}</h4>
+            <p class="text-white" style="opacity:0.82;">{{ item.description }}</p>
+
+            <div class="mt-auto d-flex justify-content-between align-items-center gap-2 flex-wrap">
+              <strong class="fs-5 text-white">TZS {{ '{:,.0f}'.format(item.price) }}</strong>
               <form method="post" action="{{ url_for('add_to_cart', item_id=item.id) }}">
-                <button class="btn btn-warning">Add</button>
+                <button class="btn btn-warning">Add to Cart</button>
               </form>
             </div>
           </div>
@@ -59,4 +263,25 @@
     </div>
   </div>
 </section>
+
+<section class="py-5 position-relative overflow-hidden" style="background: linear-gradient(135deg, #0f5132 0%, #198754 55%, #d1e7dd 100%);">
+  <div style="position:absolute; inset:0; background: rgba(0,0,0,0.12); pointer-events:none;"></div>
+  <div class="container position-relative">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-8 text-white">
+        <h2 class="fw-bold mb-2">Want something special?</h2>
+        <p class="mb-0 text-white" style="opacity:0.82;">
+          Place a custom order on WhatsApp and tell us exactly what you want.
+        </p>
+      </div>
+      <div class="col-lg-4 text-lg-end">
+        <a href="https://wa.me/255683344199?text=Hello%20I%20want%20to%20place%20a%20custom%20food%20order"
+           class="btn btn-success btn-lg">
+          Order on WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
 {% endblock %}

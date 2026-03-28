@@ -16,6 +16,46 @@ from flask import (
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 
+
+
+
+MENU_GALLERIES = {
+    "Jollof Rice + Chicken": [
+        "images/jollof4.jpeg",
+        "images/jollof0.jpeg",
+        "images/jollof1.jpeg",
+    ],
+    "Egusi + Pounded Yam": [
+        "images/egusi1.jpeg",
+        "images/egusi3.jpeg",
+        "images/egusinew.jpeg",
+    ],
+    "Fried Rice + Chicken": [
+        "images/friedrice.jpeg",
+        "images/friedrice1.jpeg",
+    ],
+    "Beans + Plantain": [
+        "images/beansandplantain2.jpeg",
+        "images/beansandplantain1.jpeg",
+    ],
+   "Okro Soup": [
+        "images/okro0.jpeg",
+        "images/okro1.jpeg",
+    ],
+    "Custome Order": [
+        "images/chat.jpeg",
+        "images/custome1.jpeg",
+    ],
+
+
+    "Jollof Rice + Chicken": [
+        "images/jollof4.jpeg",
+        "images/jollof0.jpeg",
+        "images/jollof1.jpeg",
+    ],
+    
+}
+
 load_dotenv()
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -104,9 +144,44 @@ def cart_items_with_totals():
     return items, total
 
 
+# whatsapp notification 
+
+def send_whatsapp_order_notification(order):
+    phone = os.getenv("WHATSAPP_PHONE")
+    apikey = os.getenv("WHATSAPP_API_KEY")
+
+    if not phone or not apikey:
+        print("WhatsApp skipped: WHATSAPP_PHONE or WHATSAPP_API_KEY missing.")
+        return
+
+    message = f"""🚨 NEW ORDER
+
+Name: {order.customer_name}
+Phone: {order.phone}
+
+Items:
+"""
+
+    for item in order.items:
+        item_name = item.menu_item.name if item.menu_item else "Unknown Item"
+        message += f"- {item_name} x{item.quantity}\n"
+
+    message += f"""
+Total: TZS {order.total_amount}
+Address: {order.address}
+"""
+
+    url = f"https://api.callmebot.com/whatsapp.php?phone={phone}&text={quote(message)}&apikey={apikey}"
+
+    try:
+        print("Sending WhatsApp notification...")
+        response = requests.get(url, timeout=20)
+        print("WhatsApp sent:", response.status_code)
+        print("WhatsApp response:", response.text)
+    except Exception as e:
+        print("WhatsApp failed:", e)
+
 # app.py - Telegram order notification helper
-
-
 
 def send_telegram_order_notification(order):
     bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
@@ -147,43 +222,43 @@ def seed_data():
                 name='Jollof Rice + Chicken',
                 description='Smoky Nigerian jollof rice served with fried chicken.',
                 price=12000,
-                image_url='https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80',
+                image_url='/static/images/jollof4.jpeg',
                 category='Rice',
             ),
             MenuItem(
                 name='Egusi + Pounded Yam',
                 description='Rich melon soup with soft pounded yam.',
                 price=15000,
-                image_url='https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80',
+                image_url='/static/images/egusi0.jpeg',
                 category='Soup',
             ),
             MenuItem(
                 name='Fried Rice + Chicken',
                 description='Colorful fried rice with vegetables and juicy chicken.',
                 price=12000,
-                image_url='https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=800&q=80',
+                image_url='/static/images/friedrice1.jpeg',
                 category='Rice',
             ),
             MenuItem(
                 name='Beans + Plantain',
                 description='Soft beans porridge served with sweet fried plantain.',
                 price=9000,
-                image_url='https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80',
+                image_url='/static/images/beansandplantain0.jpeg',
                 category='Specials',
             ),
             MenuItem(
-                name='Suya',
-                description='Spicy grilled beef skewers with onions and tomatoes.',
-                price=7000,
-                image_url='https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=800&q=80',
-                category='Grill',
-            ),
+                name='Okro Soup',
+                description='Fresh okro soup prepared with rich flavor and served hot.',
+                price=10000,
+                image_url='/static/images/okro0.jpeg',
+                category='Soup',
+),
             MenuItem(
-                name='Zobo Drink',
+                name='Custome Order',
                 description='Refreshing chilled hibiscus drink.',
                 price=3000,
-                image_url='https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80',
-                category='Drinks',
+                image_url='/static/images/chat.jpeg',
+                category='any',
             ),
         ]
         db.session.add_all(sample_items)
@@ -191,7 +266,10 @@ def seed_data():
     if not AdminUser.query.filter_by(username=os.getenv('ADMIN_USERNAME', 'admin')).first():
         admin = AdminUser(
             username=os.getenv('ADMIN_USERNAME', 'admin'),
-            password_hash=generate_password_hash(os.getenv('ADMIN_PASSWORD', 'admin123')),
+            password_hash=generate_password_hash(
+                os.getenv('ADMIN_PASSWORD', 'admin123'),
+                method='pbkdf2:sha256'
+            ),
         )
         db.session.add(admin)
 
@@ -217,8 +295,13 @@ def menu():
         query = query.filter_by(category=category)
     items = query.order_by(MenuItem.category, MenuItem.name).all()
     categories = [row[0] for row in db.session.query(MenuItem.category).distinct().all()]
-    return render_template('menu.html', items=items, categories=categories, active_category=category)
-
+    return render_template(
+    'menu.html',
+    items=items,
+    categories=categories,
+    active_category=category,
+    galleries=MENU_GALLERIES
+)
 
 @app.post('/add-to-cart/<int:item_id>')
 def add_to_cart(item_id):
@@ -280,7 +363,6 @@ def checkout():
             flash('Name, phone, and address are required.', 'danger')
             return render_template('checkout.html', cart_items=items, total=total)
 
-        # create the main order
         order = Order(
             customer_name=customer_name,
             phone=phone,
@@ -290,9 +372,8 @@ def checkout():
             status='Pending'
         )
         db.session.add(order)
-        db.session.flush()   # gives order.id before final commit
+        db.session.flush()
 
-        # save each cart item into OrderItem table
         for entry in items:
             db.session.add(
                 OrderItem(
@@ -303,15 +384,21 @@ def checkout():
                 )
             )
 
-        # save everything to database
         db.session.commit()
 
-        # send telegram notification after save
-        send_telegram_order_notification(order)
+        try:
+            send_telegram_order_notification(order)
+        except Exception as e:
+            print("Telegram notification error inside checkout:", e)
 
-        # clear cart
+        try:
+            send_whatsapp_order_notification(order)
+        except Exception as e:
+            print("WhatsApp notification error inside checkout:", e)
+
         session['cart'] = {}
         session['last_order_id'] = order.id
+        session['customer_phone'] = order.phone
         session.modified = True
 
         flash('Order placed successfully.', 'success')
@@ -339,6 +426,47 @@ def admin_login():
             return redirect(url_for('admin_dashboard'))
         flash('Invalid admin credentials.', 'danger')
     return render_template('admin/login.html')
+
+
+
+@app.route('/my-orders')
+def my_orders():
+    customer_phone = session.get('customer_phone')
+
+    # fallback: recover customer phone from last order if session phone is missing
+    if not customer_phone:
+        last_order_id = session.get('last_order_id')
+        if last_order_id:
+            last_order = Order.query.get(last_order_id)
+            if last_order:
+                customer_phone = last_order.phone
+                session['customer_phone'] = customer_phone
+                session.modified = True
+
+    if not customer_phone:
+        flash('No customer order history found on this device yet. Place an order first.', 'warning')
+        return redirect(url_for('home'))
+
+    orders = Order.query.filter_by(phone=customer_phone).order_by(Order.created_at.desc()).all()
+    return render_template('my_orders.html', orders=orders)
+
+
+@app.route('/my-orders/<int:order_id>')
+def my_order_detail(order_id):
+    customer_phone = session.get('customer_phone')
+
+    if not customer_phone:
+        flash('You cannot view this order right now.', 'danger')
+        return redirect(url_for('home'))
+
+    order = Order.query.get_or_404(order_id)
+
+    if order.phone != customer_phone:
+        flash('This order does not belong to this customer session.', 'danger')
+        return redirect(url_for('my_orders'))
+
+    return render_template('my_order_detail.html', order=order)
+
 
 
 @app.route('/admin/logout')

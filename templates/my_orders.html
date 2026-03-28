@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}N' Kitchens | My Orders{% endblock %}
+
+{% block content %}
+<section class="py-5" style="background: linear-gradient(135deg, #0f5132 0%, #198754 55%, #d1e7dd 100%); min-height: 100vh;">
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+      <div>
+        <h1 class="fw-bold text-white mb-1">My Orders</h1>
+        <p class="text-white mb-0" style="opacity: 0.85;">
+          View your recent orders and open any one to see full details.
+        </p>
+      </div>
+      <a href="{{ url_for('menu') }}" class="btn btn-warning btn-lg">Order More</a>
+    </div>
+
+    {% if orders %}
+      <div class="row g-4">
+        {% for order in orders %}
+        <div class="col-12 col-lg-6">
+          <div class="rounded-4 shadow-sm h-100 p-4"
+               style="background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(14px);">
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+              <div>
+                <h4 class="fw-bold text-white mb-1">Order #{{ order.id }}</h4>
+                <p class="text-white mb-0" style="opacity: 0.8;">
+                  {{ order.created_at.strftime('%d %b %Y, %I:%M %p') if order.created_at else '' }}
+                </p>
+              </div>
+              <span class="badge bg-warning text-dark px-3 py-2">{{ order.status }}</span>
+            </div>
+
+            <p class="text-white mb-2"><strong>Total:</strong> TZS {{ '{:,.0f}'.format(order.total_amount) }}</p>
+            <p class="text-white mb-3"><strong>Address:</strong> {{ order.address }}</p>
+
+            <div class="mb-3">
+              <strong class="text-white">Items:</strong>
+              <ul class="mb-0 ps-3 mt-2">
+                {% for order_item in order.items %}
+                  <li class="text-white" style="opacity: 0.9;">
+                    {{ order_item.menu_item.name if order_item.menu_item else 'Item' }} x {{ order_item.quantity }}
+                  </li>
+                {% endfor %}
+              </ul>
+            </div>
+
+            <a href="{{ url_for('my_order_detail', order_id=order.id) }}" class="btn btn-light">
+              View Details
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="rounded-4 shadow-sm p-5 text-center"
+           style="background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(14px);">
+        <h3 class="fw-bold text-white">No orders found</h3>
+        <p class="text-white mb-4" style="opacity: 0.85;">
+          You do not have any saved orders for this session yet.
+        </p>
+        <a href="{{ url_for('menu') }}" class="btn btn-warning btn-lg">Browse Menu</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

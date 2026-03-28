@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}N' Kitchens | Order Details{% endblock %}
+
+{% block content %}
+<section class="py-5" style="background: linear-gradient(135deg, #0f5132 0%, #198754 55%, #d1e7dd 100%); min-height: 100vh;">
+  <div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+      <div>
+        <h1 class="fw-bold text-white mb-1">Order #{{ order.id }}</h1>
+        <p class="text-white mb-0" style="opacity: 0.85;">Full details of your order.</p>
+      </div>
+      <a href="{{ url_for('my_orders') }}" class="btn btn-light">Back to My Orders</a>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="rounded-4 shadow-sm p-4"
+             style="background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(14px);">
+          <h4 class="fw-bold text-white mb-4">Order Items</h4>
+
+          {% for order_item in order.items %}
+          <div class="rounded-4 overflow-hidden mb-4"
+               style="background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.14);">
+            {% if order_item.menu_item and order_item.menu_item.image_url %}
+            <img
+              src="{{ order_item.menu_item.image_url }}"
+              alt="{{ order_item.menu_item.name }}"
+              class="w-100"
+              style="height: 260px; object-fit: cover;"
+            >
+            {% endif %}
+
+            <div class="p-3">
+              <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                <div>
+                  <h5 class="fw-bold text-white mb-1">
+                    {{ order_item.menu_item.name if order_item.menu_item else 'Item' }}
+                  </h5>
+                  <p class="text-white mb-1" style="opacity: 0.8;">
+                    {{ order_item.menu_item.description if order_item.menu_item else '' }}
+                  </p>
+                  <p class="text-white mb-0">Quantity: {{ order_item.quantity }}</p>
+                </div>
+                <strong class="text-white">
+                  TZS {{ '{:,.0f}'.format(order_item.quantity * order_item.price) }}
+                </strong>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+
+          <div class="d-flex justify-content-between fs-5 pt-2">
+            <strong class="text-white">Total</strong>
+            <strong class="text-white">TZS {{ '{:,.0f}'.format(order.total_amount) }}</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="rounded-4 shadow-sm p-4 mb-4"
+             style="background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(14px);">
+          <h4 class="fw-bold text-white mb-3">Order Info</h4>
+          <p class="text-white"><strong>Status:</strong> {{ order.status }}</p>
+          <p class="text-white"><strong>Name:</strong> {{ order.customer_name }}</p>
+          <p class="text-white"><strong>Phone:</strong> {{ order.phone }}</p>
+          <p class="text-white"><strong>Address:</strong> {{ order.address }}</p>
+          <p class="text-white"><strong>Notes:</strong> {{ order.notes or 'None' }}</p>
+          <p class="text-white mb-0">
+            <strong>Date:</strong>
+            {{ order.created_at.strftime('%d %b %Y, %I:%M %p') if order.created_at else '' }}
+          </p>
+        </div>
+
+        <div class="rounded-4 shadow-sm p-4"
+             style="background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(14px);">
+          <h4 class="fw-bold text-white mb-3">Need another meal?</h4>
+          <p class="text-white mb-3" style="opacity: 0.85;">
+            Go back to the menu and place another order.
+          </p>
+          <a href="{{ url_for('menu') }}" class="btn btn-warning">Order Again</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
