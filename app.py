@@ -129,18 +129,26 @@ def cart_items_with_totals():
     cart = get_cart()
     items = []
     total = 0
+
     if not cart:
         return items, total
 
     menu_items = MenuItem.query.filter(MenuItem.id.in_(cart.keys())).all()
     lookup = {str(item.id): item for item in menu_items}
+
     for item_id, qty in cart.items():
         item = lookup.get(str(item_id))
         if not item:
             continue
+
         subtotal = item.price * qty
         total += subtotal
-        items.append({'item': item, 'quantity': qty, 'subtotal': subtotal})
+        items.append({
+            'item': item,
+            'quantity': qty,
+            'subtotal': subtotal
+        })
+
     return items, total
 
 
@@ -252,13 +260,13 @@ def seed_data():
                 price=10000,
                 image_url='/static/images/okro0.jpeg',
                 category='Soup',
-),
+            ),
             MenuItem(
-                name='Custome Order',
-                description='Refreshing chilled hibiscus drink.',
+                name='Custom Order',
+                description='Tell us exactly what you want on WhatsApp.',
                 price=3000,
                 image_url='/static/images/chat.jpeg',
-                category='any',
+                category='Specials',
             ),
         ]
         db.session.add_all(sample_items)
@@ -284,24 +292,27 @@ def inject_globals():
 @app.route('/')
 def home():
     featured_items = MenuItem.query.filter_by(available=True).limit(6).all()
-    return render_template('home.html', featured_items=featured_items)
+    return render_template('home.html', featured_items=featured_items, galleries=MENU_GALLERIES)
 
 
 @app.route('/menu')
 def menu():
     category = request.args.get('category')
     query = MenuItem.query.filter_by(available=True)
+
     if category:
         query = query.filter_by(category=category)
+
     items = query.order_by(MenuItem.category, MenuItem.name).all()
     categories = [row[0] for row in db.session.query(MenuItem.category).distinct().all()]
+
     return render_template(
-    'menu.html',
-    items=items,
-    categories=categories,
-    active_category=category,
-    galleries=MENU_GALLERIES
-)
+        'menu.html',
+        items=items,
+        categories=categories,
+        active_category=category,
+        galleries=MENU_GALLERIES
+    )
 
 @app.post('/add-to-cart/<int:item_id>')
 def add_to_cart(item_id):

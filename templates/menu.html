@@ -2,100 +2,111 @@
 {% block title %}N' Kitchens | Menu{% endblock %}
 
 {% block content %}
+
+<section class="py-5" style="background: linear-gradient(135deg, #0f5132 0%, #198754 55%, #d1e7dd 100%);">
+  <div class="container py-4 text-center">
+    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill mb-3 shadow-sm">
+      N' Kitchens Menu
+    </span>
+    <h1 class="display-4 fw-bold text-white mb-3">Choose Your Favorite Meal</h1>
+    <p class="lead text-white mb-0" style="opacity: 0.9;">
+      Fresh Nigerian meals, rich flavor, and easy ordering.
+    </p>
+  </div>
+</section>
+
 <section class="py-5 bg-light">
   <div class="container">
-    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-5">
+
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-end gap-3 mb-4">
       <div>
-        <h1 class="fw-bold mb-2">Our Menu</h1>
-        <p class="text-muted mb-0">Choose your favorite meal and place your order.</p>
+        <h2 class="fw-bold mb-1">Our Menu</h2>
+        <p class="text-muted mb-0">Pick your meal and add it to cart.</p>
       </div>
 
-      <div class="text-center my-4">
-        <a href="https://wa.me/2550683344199?text=Hello%20I%20want%20to%20place%20a%20custom%20food%20order"
-           class="btn btn-success btn-lg">
-           📲 Custom Order on WhatsApp
-        </a>
-      </div>
-
-      <div class="d-flex flex-wrap gap-2">
-        <a class="btn {% if not active_category %}btn-dark{% else %}btn-outline-dark{% endif %}" href="{{ url_for('menu') }}">All</a>
-        {% for category in categories %}
-          <a class="btn {% if active_category == category %}btn-dark{% else %}btn-outline-dark{% endif %}" href="{{ url_for('menu', category=category) }}">
-            {{ category }}
-          </a>
-        {% endfor %}
-      </div>
+      <a
+        href="https://wa.me/255683344199?text=Hello%20I%20want%20to%20place%20a%20custom%20food%20order"
+        class="btn btn-success btn-lg"
+      >
+        Custom Order on WhatsApp
+      </a>
     </div>
 
+    <div class="d-flex flex-wrap gap-2 mb-4">
+      <a href="{{ url_for('menu') }}" class="btn {% if not active_category %}btn-dark{% else %}btn-outline-dark{% endif %}">
+        All
+      </a>
+      {% for category in categories %}
+      <a
+        href="{{ url_for('menu', category=category) }}"
+        class="btn {% if active_category == category %}btn-dark{% else %}btn-outline-dark{% endif %}"
+      >
+        {{ category }}
+      </a>
+      {% endfor %}
+    </div>
+
+    {% if items %}
     <div class="row g-4">
       {% for item in items %}
-      <div class="col-12 col-md-6 col-xl-4">
-        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden menu-card">
+      <div class="col-12 col-md-6 col-lg-4">
+        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
 
           {% set gallery = galleries.get(item.name, []) %}
 
           {% if gallery %}
-          <div id="carousel-{{ item.id }}" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-              {% for image in gallery %}
-              <div class="carousel-item {% if loop.first %}active{% endif %}">
-                <img
-                  src="{{ url_for('static', filename=image) }}"
-                  alt="{{ item.name }}"
-                  class="d-block w-100"
-                  style="height: 260px; object-fit: cover;"
-                >
-              </div>
-              {% endfor %}
-            </div>
-
-            {% if gallery|length > 1 %}
-            <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ item.id }}" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon"></span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carousel-{{ item.id }}" data-bs-slide="next">
-              <span class="carousel-control-next-icon"></span>
-            </button>
-            {% endif %}
-          </div>
+          <img
+            src="{{ url_for('static', filename=gallery[0]) }}"
+            class="card-img-top"
+            alt="{{ item.name }}"
+            style="height: 260px; object-fit: cover;"
+          >
           {% else %}
           <img
             src="{{ item.image_url }}"
-            alt="{{ item.name }}"
             class="card-img-top"
+            alt="{{ item.name }}"
             style="height: 260px; object-fit: cover;"
           >
           {% endif %}
 
           <div class="card-body d-flex flex-column p-4">
             <span class="small text-uppercase text-muted">{{ item.category }}</span>
-
-            <h4 class="fw-bold mt-2 mb-2">{{ item.name }}</h4>
-
-            <p class="text-muted mb-4">{{ item.description }}</p>
+            <h4 class="fw-bold mt-2">{{ item.name }}</h4>
+            <p class="text-muted">{{ item.description }}</p>
 
             <div class="mt-auto">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <strong class="fs-4">TZS {{ '{:,.0f}'.format(item.price) }}</strong>
-              </div>
+              <div class="fw-bold fs-4 mb-3">TZS {{ '{:,.0f}'.format(item.price) }}</div>
 
-              <form method="post" action="{{ url_for('add_to_cart', item_id=item.id) }}" class="d-flex gap-2">
-                <input
-                  type="number"
-                  name="quantity"
-                  value="1"
-                  min="1"
-                  class="form-control"
-                  style="max-width: 90px;"
-                >
-                <button class="btn btn-warning w-100">Add to Cart</button>
+              <form method="post" action="{{ url_for('add_to_cart', item_id=item.id) }}">
+                <div class="d-flex gap-2">
+                  <input
+                    type="number"
+                    name="quantity"
+                    value="1"
+                    min="1"
+                    class="form-control"
+                    style="max-width: 90px;"
+                  >
+                  <button type="submit" class="btn btn-warning flex-grow-1">
+                    Add to Cart
+                  </button>
+                </div>
               </form>
             </div>
           </div>
+
         </div>
       </div>
       {% endfor %}
     </div>
+    {% else %}
+    <div class="alert alert-warning rounded-4 shadow-sm border-0">
+      No menu items found yet. Seed your menu data first.
+    </div>
+    {% endif %}
+
   </div>
 </section>
+
 {% endblock %}
