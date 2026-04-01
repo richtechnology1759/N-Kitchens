@@ -560,3 +560,24 @@ with app.app_context():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
+
+# EDIT MENU ITEM
+@app.route('/admin/menu/edit/<int:item_id>', methods=['GET', 'POST'])
+def edit_menu_item(item_id):
+    item = MenuItem.query.get_or_404(item_id)
+
+    if request.method == 'POST':
+        item.name = request.form['name']
+        item.description = request.form['description']
+        item.price = int(request.form['price'])
+        item.category = request.form['category']
+        item.image_url = request.form['image_url']
+
+        db.session.commit()
+        flash('Item updated successfully!', 'success')
+        return redirect(url_for('admin_menu'))
+
+    return render_template('edit_item.html', item=item)

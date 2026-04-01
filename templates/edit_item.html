@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="py-5">
+  <div class="container">
+    <h2 class="fw-bold mb-4">Edit Menu Item</h2>
+
+    <form method="POST">
+      <input type="text" name="name" value="{{ item.name }}" class="form-control mb-3" placeholder="Name">
+
+      <textarea name="description" class="form-control mb-3" placeholder="Description">{{ item.description }}</textarea>
+
+      <input type="number" name="price" value="{{ item.price }}" class="form-control mb-3" placeholder="Price">
+
+      <input type="text" name="category" value="{{ item.category }}" class="form-control mb-3" placeholder="Category">
+
+      <input type="text" name="image_url" value="{{ item.image_url }}" class="form-control mb-3" placeholder="Image URL">
+
+      <button class="btn btn-success">Update Item</button>
+    </form>
+
+  </div>
+</section>
+
+{% endblock %}
