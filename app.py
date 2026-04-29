@@ -2,6 +2,12 @@ import os
 from datetime import datetime
 from functools import wraps
 
+
+# Menu image upload + delete support
+
+from werkzeug.utils import secure_filename
+from flask import current_app
+
 import requests
 from dotenv import load_dotenv
 from flask import (
@@ -516,24 +522,61 @@ def admin_order_detail(order_id):
     return render_template('admin/order_detail.html', order=order)
 
 
+# Admin menu page: add menu item with image upload
 @app.route('/admin/menu', methods=['GET', 'POST'])
 @admin_required
 def admin_menu():
     if request.method == 'POST':
+        image_url = ''
+
+        uploaded_image = request.files.get('image')
+
+        if uploaded_image and uploaded_image.filename:
+            filename = secure_filename(uploaded_image.filename)
+
+            upload_folder = os.path.join(
+                current_app.root_path,
+                'static',
+                'images',
+                'menu'
+            )
+
+            os.makedirs(upload_folder, exist_ok=True)
+
+            image_path = os.path.join(upload_folder, filename)
+            uploaded_image.save(image_path)
+
+            image_url = f'/static/images/menu/{filename}'
+
         item = MenuItem(
             name=request.form['name'].strip(),
             description=request.form['description'].strip(),
             price=float(request.form['price']),
-            image_url=request.form['image_url'].strip(),
+            image_url=image_url,
             category=request.form['category'].strip() or 'Main',
             available=bool(request.form.get('available')),
         )
+
         db.session.add(item)
         db.session.commit()
+
         flash('Menu item added.', 'success')
         return redirect(url_for('admin_menu'))
+
     items = MenuItem.query.order_by(MenuItem.category, MenuItem.name).all()
     return render_template('admin/menu.html', items=items)
+# Delete menu item from admin panel
+@app.route('/admin/menu/delete/<int:item_id>', methods=['POST'])
+@admin_required
+def delete_menu_item(item_id):
+    item = MenuItem.query.get_or_404(item_id)
+
+    db.session.delete(item)
+    db.session.commit()
+
+    flash('Menu item deleted.', 'success')
+    return redirect(url_for('admin_menu'))
+
 
 
 @app.route('/admin/menu/toggle/<int:item_id>', methods=['POST'])
@@ -572,7 +615,7 @@ def edit_menu_item(item_id):
     if request.method == 'POST':
         item.name = request.form['name']
         item.description = request.form['description']
-        item.price = int(request.form['price'])
+        item.price = float(request.form['price'])
         item.category = request.form['category']
         item.image_url = request.form['image_url']
 

@@ -84,7 +84,7 @@
             <div class="shadow-sm rounded-4 overflow-hidden"
                  style="background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18);">
               <img
-                src="{{ url_for('static', filename='images/egusi1.jpeg') }}"
+                src="{{ url_for('static', filename='images/egusialone.jpeg') }}"
                 class="w-100"
                 alt="Egusi Soup"
                 style="height: 190px; object-fit: cover;"
@@ -203,7 +203,7 @@
       <div class="col-12 col-md-6 col-lg-4">
         <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
           <img
-            src="{{ url_for('static', filename=galleries.get(item.name, ['images/jollof0.jpeg'])[0]) }}"
+            src="{{ url_for('static', filename=galleries.get(item.name, ['images/egusi0.jpeg'])[0]) }}"
             class="card-img-top"
             alt="{{ item.name }}"
             style="height: 260px; object-fit: cover;"

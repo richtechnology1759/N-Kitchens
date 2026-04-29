@@ -1,51 +1,77 @@
 {% extends 'base.html' %}
 {% block title %}Manage Menu{% endblock %}
+
 {% block content %}
 <section class="py-5">
   <div class="container">
+
+    <!-- Header -->
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
       <div>
         <h1 class="fw-bold mb-1">Manage Menu</h1>
-        <p class="text-muted mb-0">Add food items and switch them on or off.</p>
+        <p class="text-muted mb-0">Add food items, upload images, and manage availability.</p>
       </div>
-      <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-dark">Back to Dashboard</a>
+      <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-dark">
+        Back to Dashboard
+      </a>
     </div>
 
     <div class="row g-4">
+
+      <!-- ADD MENU FORM -->
       <div class="col-lg-5">
         <div class="card border-0 shadow-sm p-4">
           <h4 class="fw-bold mb-3">Add Menu Item</h4>
-          <form method="post">
+
+          <form method="post" enctype="multipart/form-data">
+
             <div class="mb-3">
               <input class="form-control" name="name" placeholder="Item name" required>
             </div>
+
             <div class="mb-3">
               <textarea class="form-control" name="description" placeholder="Description" required></textarea>
             </div>
+
             <div class="mb-3">
               <input class="form-control" name="price" type="number" step="0.01" placeholder="Price" required>
             </div>
+
             <div class="mb-3">
-              <input class="form-control" name="category" placeholder="Category">
+              <input class="form-control" name="category" placeholder="Category (e.g Rice, Specials)">
             </div>
+
+            <!-- IMAGE UPLOAD -->
             <div class="mb-3">
-              <input class="form-control" name="image_url" placeholder="Image URL">
+              <label class="form-label fw-semibold">Upload Food Image</label>
+              <input class="form-control" name="image" type="file" accept="image/*">
             </div>
+
             <div class="form-check mb-3">
               <input class="form-check-input" type="checkbox" name="available" checked id="availableCheck">
-              <label class="form-check-label" for="availableCheck">Available now</label>
+              <label class="form-check-label" for="availableCheck">
+                Available now
+              </label>
             </div>
-            <button class="btn btn-dark">Add Item</button>
+
+            <button class="btn btn-dark w-100">
+              Add Item
+            </button>
+
           </form>
         </div>
       </div>
 
+      <!-- MENU TABLE -->
       <div class="col-lg-7">
         <div class="card border-0 shadow-sm">
+
           <div class="table-responsive">
             <table class="table align-middle mb-0">
-              <thead>
+
+              <thead class="table-light">
                 <tr>
+                  <th>Image</th>
                   <th>Name</th>
                   <th>Category</th>
                   <th>Price</th>
@@ -53,31 +79,75 @@
                   <th>Actions</th>
                 </tr>
               </thead>
+
               <tbody>
                 {% for item in items %}
                 <tr>
+
+                  <!-- IMAGE -->
+                  <td>
+                    {% if item.image_url %}
+                      <img src="{{ item.image_url }}" style="width:60px; height:60px; object-fit:cover; border-radius:8px;">
+                    {% else %}
+                      <span class="text-muted">No image</span>
+                    {% endif %}
+                  </td>
+
                   <td>{{ item.name }}</td>
+
                   <td>{{ item.category }}</td>
-                  <td>TZS {{ '{:,.0f}'.format(item.price) }}</td>
-                  <td>{{ 'Available' if item.available else 'Hidden' }}</td>
+
+                  <td>
+                    TZS {{ '{:,.0f}'.format(item.price) }}
+                  </td>
+
+                  <td>
+                    {% if item.available %}
+                      <span class="badge bg-success">Available</span>
+                    {% else %}
+                      <span class="badge bg-secondary">Hidden</span>
+                    {% endif %}
+                  </td>
+
                   <td>
                     <div class="d-flex gap-2">
-                      <a href="{{ url_for('edit_menu_item', item_id=item.id) }}" class="btn btn-sm btn-dark">
+
+                      <!-- EDIT -->
+                      <a href="{{ url_for('edit_menu_item', item_id=item.id) }}"
+                         class="btn btn-sm btn-dark">
                         Edit
                       </a>
 
-                      <form method="post" action="{{ url_for('toggle_menu_item', item_id=item.id) }}">
-                        <button class="btn btn-sm btn-outline-dark">Toggle</button>
+                      <!-- TOGGLE -->
+                      <form method="post"
+                            action="{{ url_for('toggle_menu_item', item_id=item.id) }}">
+                        <button class="btn btn-sm btn-outline-dark">
+                          Toggle
+                        </button>
                       </form>
+
+                      <!-- DELETE -->
+                      <form method="post"
+                            action="{{ url_for('delete_menu_item', item_id=item.id) }}">
+                        <button class="btn btn-sm btn-danger"
+                                onclick="return confirm('Delete this item?')">
+                          Delete
+                        </button>
+                      </form>
+
                     </div>
                   </td>
+
                 </tr>
                 {% endfor %}
               </tbody>
+
             </table>
           </div>
+
         </div>
       </div>
+
     </div>
   </div>
 </section>
